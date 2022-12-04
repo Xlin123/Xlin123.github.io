@@ -1,0 +1,31 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h2 class="display-4 mb-1">Hi, I'm Xavier</h2>    
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="mx-auto col-8">
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h5>Quick About Me</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Hi, I'm a @Model.Age year old student at TMU majoring in Computer Science.</li>
+                        <li> I am a first-year student who enjoys learning a lot about web development in both front and backend.</li>
+
+                    </ul>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+</div>
