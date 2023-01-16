@@ -15,10 +15,10 @@ namespace PersonalWebsite.Pages
 
         public void OnGet()
         {
-            var birthYear = 2004;
+            var birthYear = 2005;
             var currentYear = DateTime.Today.Year;
-            Age = currentYear- birthYear;
-
+            Age = currentYear - birthYear;
+            if (DateTime.Today.Month >= 11) Age ++ ;
         }
     }
 }

@@ -4,13 +4,27 @@
     ViewData["Title"] = "Home page";
 }
 
+<style>
+    .social-icon {
+        color: #aaaaaa;
+        transition: color 0.2s;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-icon:hover {
+        color: #333333;
+    }
+</style>
+
+
 <div class="text-center">
-    <h2 class="display-4 mb-1">Hi, I'm Xavier</h2>    
+    <h2 class="display-4 mb-1">Hi, I<span class="auto-type"></span></h2>    
 </div>
 <div class="container mt-5">
     <div class="row">
         <div class="mx-auto col-8">
-            <div class="card mt-2">
+            <div class="card mt-2 mb-2">
                 <div class="card-header">
                     <h5>Quick About Me</h5>
                 </div>
@@ -18,14 +32,49 @@
                     <ul>
                         <li>Hi, I'm a @Model.Age year old student at TMU majoring in Computer Science.</li>
                         <li> I am a first-year student who enjoys learning a lot about web development in both front and backend.</li>
-
+                        <li> Right now I'm learning about:
+                            <ul>
+                                <li>ASP.NET Core</li>
+                                <li>REST and GraphQL</li>
+                                <li>Azure Cloud Services</li>
+                                <li>External API's</li>
+                                <li>Razor Pages</li>
+                            </ul>
+                        </li>
                     </ul>
+                    <p>You can visit my project page <a asp-page="/Projects">here</a>   </p>
                 </div>
                 <div class="card-footer">
+                    <h6>Here are my socials and resume.</h6>
                 </div>
             </div>
 
+            <a class="social-icon" href="https://www.linkedin.com/in/xavier-lin-059632242/" target="_blank">
+                <ion-icon name="logo-linkedin" size="large"></ion-icon>
+            </a>
+            <a class="social-icon"  href="https://github.com/Xlin123/" target="_blank">
+                <ion-icon  name="logo-github" size="large"></ion-icon>
+            </a>
+            <a class="social-icon" title="Resume" href="https://docs.google.com/document/d/1TaV0gO1l250TnaKSnXDfe0KHcklxqe_vyg2vDoDVmHU/edit?usp=sharing" target="_blank">
+                <ion-icon title="Resume" name="mail-open-outline" size="large"></ion-icon>
+            </a>
+            
+            
         </div>
     </div>
     
 </div>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script>
+
+
+    let typed = new Typed(".auto-type", {
+        strings: ["'m Xavier Lin.^1000", "'m a C# Developer.^1000", "'m in love with programming.^1000"],
+        typeSpeed: 50,
+        backSpeed: 50,
+        loop: true,
+        showCursor: false,
+    })
+
+</script>
