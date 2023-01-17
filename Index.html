@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PersonalWebsite</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="site.css"
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-black border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand text-black" href="/">Xavier Lin</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                       
+                        <li class="nav-item">
+                            <a class="nav-link text-black"href="projects">Projects</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="text-center">
+        <h2 class="display-4 mb-1">Hi, I<span class="auto-type"></span></h2>    
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="mx-auto col-8">
+                <div class="card mt-2 mb-2">
+                    <div class="card-header">
+                        <h5>Quick About Me</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Hi, I'm a <span id="currentAge"></span> year old student at TMU majoring in Computer Science.</li>
+                            <li> I am a first-year student who enjoys learning a lot about web development in both front and backend.</li>
+                            <li> Right now I'm learning about:
+                                <ul>
+                                    <li>ASP.NET Core</li>
+                                    <li>REST and GraphQL</li>
+                                    <li>Azure Cloud Services</li>
+                                    <li>External API's</li>
+                                    <li>Razor Pages</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>You can visit my project page <a href="Projects">here</a>   </p>
+                    </div>
+                    <div class="card-footer">
+                        <h6>Here are my socials and resume.</h6>
+                    </div>
+                </div>
+    
+                <a class="social-icon" href="https://www.linkedin.com/in/xavier-lin-059632242/" target="_blank">
+                    <ion-icon name="logo-linkedin" size="large"></ion-icon>
+                </a>
+                <a class="social-icon"  href="https://github.com/Xlin123/" target="_blank">
+                    <ion-icon  name="logo-github" size="large"></ion-icon>
+                </a>
+                <a class="social-icon" title="Resume" href="https://docs.google.com/document/d/1TaV0gO1l250TnaKSnXDfe0KHcklxqe_vyg2vDoDVmHU/edit?usp=sharing" target="_blank">
+                    <ion-icon title="Resume" name="mail-open-outline" size="large"></ion-icon>
+                </a>
+                
+                
+            </div>
+        </div>
+        
+    </div>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - ResumeWebsite Using .NET6 Razor Pages MMVM
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script>
+    let currentYear = new Date().getFullYear();
+        let birthYear = 2003;
+
+        document.getElementById("currentAge").innerHTML = currentYear - birthYear;
+
+    let typed = new Typed(".auto-type", {
+        strings: ["'m Xavier Lin.^1000", "'m a C# Developer.^1000", "'m in love with programming.^1000"],
+        typeSpeed: 50,
+        backSpeed: 50,
+        loop: true,
+        showCursor: false,
+    })
+
+</script>
+</body>
+</html>
