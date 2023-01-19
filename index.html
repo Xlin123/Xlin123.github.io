@@ -103,10 +103,16 @@
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script>
-    let currentYear = new Date().getFullYear();
-        let birthYear = 2003;
-
-        document.getElementById("currentAge").innerHTML = currentYear - birthYear;
+    let date = new Date();
+    let birthMonth = 10;
+    let birthYear = 2005;
+    let currentYear = date.getFullYear();
+    let currentMonth = date.getMonth();
+    if(currentMonth >= birthMonth)
+    {
+        birthYear++;
+    }
+    document.getElementById("currentAge").innerHTML = currentYear - birthYear;
 
     let typed = new Typed(".auto-type", {
         strings: ["'m Xavier Lin.^1000", "'m a C# Developer.^1000", "'m in love with programming.^1000"],
