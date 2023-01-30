@@ -46,4 +46,9 @@ a.navbar-brand {
     white-space: nowrap;
     line-height: 60px;
   }
+  .logo{
+    width:auto;
+    max-width:100%;
+    height:50px;
+}
   
