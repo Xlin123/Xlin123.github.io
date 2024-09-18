@@ -14,7 +14,8 @@ class SessionManager {
       final sessionRequest = SessionRequest.fromDefaultRequest(
           DefaultRequest.fromJson(jsonDecode(request) as Map));
       final authorizedSession = AuthorizedSession.fromRequest(sessionRequest);
-      _activeSessions.add(authorizedSession);
+      if (!_activeSessions.contains(authorizedSession))
+        _activeSessions.add(authorizedSession);
       await authorizedSession.openSocket();
       return authorizedSession;
     } catch (e) {
@@ -26,5 +27,12 @@ class SessionManager {
     final session = _activeSessions.firstWhere((s) => s.id == targetSession.id);
     await session.disconnect();
     _activeSessions.remove(session);
+  }
+
+  static String sessionsToJson() {
+    final map = <String, dynamic>{
+      "activeSessions": _activeSessions,
+    };
+    return jsonEncode(map);
   }
 }
