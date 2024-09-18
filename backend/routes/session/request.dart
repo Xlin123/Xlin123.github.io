@@ -1,7 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:backend/session_manager.dart';
 import 'package:dart_frog/dart_frog.dart';
-import '../../lib/shared/session.dart';
 
 Future<Response> onRequest(RequestContext context) {
   return switch (context.request.method) {
@@ -17,4 +18,8 @@ Future<Response> _onPost(RequestContext context) async {
   if (json.isEmpty) {
     throw const FormatException('No query parameters recieved');
   }
+  final session = await SessionManager.createSession(json);
+  return Response(
+    body: session.encryption.encryptToJson(jsonEncode(session.toJson())),
+  );
 }
