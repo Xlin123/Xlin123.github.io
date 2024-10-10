@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant B as Backend
     participant F as Frontend
@@ -8,7 +9,6 @@ sequenceDiagram
     Note left of B: payload: with sessionPublicKey
     Note Over B: 4. Attempt to initialize 
     B -->> F: Success
-<!-- [MermaidChart: 880a054e-77d4-46be-b64d-380753e656e8] -->
     B -->> B: Failure
     Note right of F: payload: authorized session & serverPublicKey
     Note over F: 5. Authorized Session Created
@@ -16,6 +16,6 @@ sequenceDiagram
     Note right of F: 6. Create Websocket Request and wait..
     Note over B: 7. Create sshnp process on provisioned container
     B <<->> F: ProcessStream Over WebSocket 
-
+```
     
 
