@@ -1,0 +1,27 @@
+name: backend
+description: A new Dart Frog application
+version: 1.0.0+1
+publish_to: none
+
+assets:
+  - .env
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  dart_frog: ^1.1.0
+  dart_frog_auth: ^1.1.0
+  dart_jsonwebtoken: ^2.14.0
+  dotenv: ^4.2.0
+  equatable: ^2.0.5
+  uuid: ^3.0.7
+  pointycastle: ^3.9.1
+  encrypt: ^5.0.3
+  dart_frog_web_socket: ^1.0.0
+  web_socket_channel: ^2.4.5
+
+dev_dependencies:
+  mocktail: ^1.0.3
+  test: ^1.25.5
+  very_good_analysis: ^5.1.0
