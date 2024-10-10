@@ -6,10 +6,10 @@
 html,
 body,
 #root,
-.app{
+.app {
     height: 100%;
     width: 100%;
     font-family: "montserrat";
     @apply bg-primary-500;
-    @apply text-redAccent-500;
+    @apply text-accent-500;
 }

@@ -1,7 +1,7 @@
-import { SelectedPage, ItemType } from '@/shared/types'
+import { SelectedPage, ItemType } from '../../shared/types'
 import { motion } from 'framer-motion';
 import React from 'react'
-import Heading from '@/shared/Heading';
+import Heading from '../../shared/Heading';
 import Item from './Item';
 import Scrollbar from 'react-custom-scrollbars-2'
 
@@ -19,7 +19,7 @@ const Specs = ({ setSelectedPage }: Props) => {
   return (
     <section id='specs' className='mx-auto min-h-full w-5/6 py-20 bg-primary-500'>
       <motion.div className='md:flex items-center justify-center'
-        onViewportEnter={() => setSelectedPage(SelectedPage.Specs)}>
+        onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
         <motion.div className='mx-auto w-5/6'
           initial="hidden"
           whileInView="visible"

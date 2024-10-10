@@ -1,5 +1,5 @@
-import Heading from '@/shared/Heading';
-import { SelectedPage } from '@/shared/types'
+import Heading from '../../shared/Heading';
+import { SelectedPage } from '../../shared/types'
 import { motion } from 'framer-motion';
 import React from 'react'
 import { useForm } from 'react-hook-form';

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import Link from "./Link";
-import { SelectedPage } from '@/shared/types';
-import useMediaQuery from '@/hooks/useMediaQuery';
-import ActionButton from '@/shared/ActionButton';
+import { SelectedPage } from '../../shared/types';
+import useMediaQuery from '../../hooks/useMediaQuery';
+import ActionButton from '../../shared/ActionButton';
 type Props = {
     selectedPage: SelectedPage,
     setSelectedPage: (value: SelectedPage) => void;
@@ -13,7 +13,7 @@ const Navbar = ({ selectedPage, setSelectedPage, isTopOfPage }: Props) => {
     const flexBetween = "flex items-center justify-between";
     const isAboveMediumScreens = useMediaQuery("(min-width: 1060px")
     const [isMenuToggled, setIsMenuToggled] = useState<boolean>(false)
-    const navbarBackground = isTopOfPage ? "" : "bg-primary-800 drop-shadow";
+    const navbarBackground = isTopOfPage ? "" : "bg-secondary-500 drop-shadow";
     return (
         <nav>
             <div className={`${navbarBackground} ${flexBetween} fixed top-0 z-40 w-full py-6 `}>
@@ -21,7 +21,7 @@ const Navbar = ({ selectedPage, setSelectedPage, isTopOfPage }: Props) => {
 
                     {isAboveMediumScreens ?
                         <>
-                            <div className={`${flexBetween} w-full  text-whiteAccent-500`}>
+                            <div className={`${flexBetween} w-full  text-accent-500`}>
                                 <div className={`${flexBetween} gap-8 text-sm`}>
                                     <Link page="Home" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
                                     <Link page="Story" selectedPage={selectedPage} setSelectedPage={setSelectedPage} />

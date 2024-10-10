@@ -1,8 +1,9 @@
-import { SelectedPage } from '@/shared/types';
-import useMediaQuery from '@/hooks/useMediaQuery';
-import ActionButton from '@/shared/ActionButton';
+import { SelectedPage } from '../../shared/types';
+import useMediaQuery from '../../hooks/useMediaQuery';
+import ActionButton from '../../shared/ActionButton';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
 import { motion } from 'framer-motion';
+import React from 'react';
 
 
 type Props = {
