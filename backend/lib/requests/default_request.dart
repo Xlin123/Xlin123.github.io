@@ -1,4 +1,4 @@
-import 'package:backend/shared/encryption.dart';
+import 'package:backend/utils/encryption.dart';
 import 'package:encrypt/encrypt.dart';
 
 /// Represents a default request.

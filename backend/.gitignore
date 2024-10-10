@@ -19,3 +19,4 @@ coverage/
 .env
 keys/
 insomnia*
+docker_password.txt

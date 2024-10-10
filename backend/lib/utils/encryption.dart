@@ -53,4 +53,46 @@ class Encryption {
     return jsonDecode(encrypter.decrypt(Encrypted.fromBase64(data), iv: iv))
         as Map<String, dynamic>;
   }
+
+  ///Encrypts the data using the AES key
+  ///ex.
+  ///payload: """"
+  ///iv: "base64"
+  ///
+  static String encryptChannel(Key aes, String data) {
+    final iv = IV.fromLength(16);
+    var encrypter = Encrypter(AES(aes));
+    return <String, dynamic>{
+      'payload': encrypter.encrypt(data, iv: iv).base64,
+      'iv': iv.base64,
+    }.toString();
+  }
+
+  ///Decrypts the data using the AES key
+  ///ex.
+  ///payload: """"
+  ///iv: "base64"
+  ///
+  ///to
+  ///
+  ///raw data for process
+  static String decryptChannel(Key aes, String data) {
+    final encrypter = Encrypter(AES(aes));
+    final iv = IV.fromBase64(jsonDecode(data)['iv'] as String);
+    final payload = jsonDecode(data)['payload'] as String;
+    return encrypter.decrypt(Encrypted.fromBase64(payload), iv: iv).toString();
+  }
+
+  static String getServerPublicKey() {
+    String modifiedPem = serverPublicPem
+      ..replaceAll('\n', '')
+      ..replaceAll('-----BEGIN PUBLIC KEY-----', '')
+      ..replaceAll('-----END PUBLIC KEY-----', '');
+    return modifiedPem;
+  }
+
+  /// Generates an AES key
+  static Key generateAESKey() {
+    return Key.fromSecureRandom(32);
+  }
 }
