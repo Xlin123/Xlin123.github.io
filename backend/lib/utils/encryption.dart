@@ -14,6 +14,12 @@ import 'package:pointycastle/asymmetric/api.dart';
 /// On request, the client sends public key to the server.
 /// The server encrypts the data using the public key.
 /// The client decrypts the data using its private key.
+///
+/// Anything sent to server is encrypted with RSA, verified and signed.
+///
+/// Anything sent over the channel is encrypted with AES + iv.
+///
+///
 class Encryption {
   Encryption(String publicKey,
       [RSAPrivateKey? privKey, RSAPublicKey? serverPubKey]) {
@@ -23,34 +29,37 @@ class Encryption {
     if (serverPubKey != null) {
       serverPublicKey = serverPubKey;
     }
-    var plain = utf8.decode(base64Decode(publicKey));
-    clientPublicKey = RSAKeyParser().parse(plain) as RSAPublicKey;
-    clientEncrypter = Encrypter(RSA(publicKey: clientPublicKey));
+    clientPublicKey = RSAKeyParser().parse(utf8.decode(base64Decode(publicKey)))
+        as RSAPublicKey;
+    clientEncrypter = Encrypter(RSA(
+        publicKey: clientPublicKey,
+        encoding: RSAEncoding.OAEP,
+        digest: RSADigest.SHA256));
   }
   static RSAPrivateKey privateKey = parseKeyFromFileSync('keys/rsa.pem');
   static RSAPublicKey serverPublicKey =
       parseKeyFromFileSync('keys/rsa.pem.pub');
   static String serverPublicPem = File('keys/rsa.pem.pub').readAsStringSync();
   late RSAPublicKey? clientPublicKey;
-  static Encrypter serverEncrypter =
-      Encrypter(RSA(publicKey: serverPublicKey, privateKey: privateKey));
+  static Encrypter serverEncrypter = Encrypter(RSA(
+      publicKey: serverPublicKey,
+      privateKey: privateKey,
+      encoding: RSAEncoding.OAEP,
+      digest: RSADigest.SHA256));
   late Encrypter? clientEncrypter;
 
   ///Inbound Request uses CLIENT public key, which is sent in the payoad
   String encryptToJson(String data) {
-    final iv = IV.fromLength(16);
     return <String, dynamic>{
-      'payload': clientEncrypter!.encrypt(data, iv: iv).base64,
-      'iv': iv.base64,
-      'publicKey': base64Encode(utf8.encode(serverPublicPem)),
+      'payload': clientEncrypter!.encrypt(data).base64,
+      'publicKey': getServerPublicKey(),
+      'signature': 'base64',
     }.toString();
   }
 
   ///Outbound Response uses SERVER private key, which is stored in the server
-  static Map<String, dynamic> decrypt(String data, IV iv) {
-    final encrypter =
-        Encrypter(RSA(publicKey: serverPublicKey, privateKey: privateKey));
-    return jsonDecode(encrypter.decrypt(Encrypted.fromBase64(data), iv: iv))
+  static Map<String, dynamic> decrypt(String data) {
+    return jsonDecode(serverEncrypter.decrypt(Encrypted.fromBase64(data)))
         as Map<String, dynamic>;
   }
 
@@ -84,11 +93,7 @@ class Encryption {
   }
 
   static String getServerPublicKey() {
-    String modifiedPem = serverPublicPem
-      ..replaceAll('\n', '')
-      ..replaceAll('-----BEGIN PUBLIC KEY-----', '')
-      ..replaceAll('-----END PUBLIC KEY-----', '');
-    return modifiedPem;
+    return base64Encode(utf8.encode(serverPublicPem));
   }
 
   /// Generates an AES key

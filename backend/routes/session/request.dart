@@ -19,7 +19,8 @@ Future<Response> _onPost(RequestContext context) async {
     throw const FormatException('No query parameters recieved');
   }
   final session = await SessionManager.createSession(json);
+  final body = session.encryption.encryptToJson(jsonEncode(session.toJson()));
   return Response(
-    body: session.encryption.encryptToJson(jsonEncode(session.toJson())),
+    body: body,
   );
 }
