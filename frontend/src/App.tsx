@@ -41,7 +41,7 @@ const App = () => {
   }
 
   return (
-    <div className="app bg-primary-500">
+    <div className="app bg-secondary">
       <Navbar
         isTopOfPage={isTopOfPage}
         selectedPage={selectedPage}

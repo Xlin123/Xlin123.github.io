@@ -1,5 +1,6 @@
 import CryptoJs from 'crypto-js';
 import { Buffer } from 'buffer/';
+import { APICalls } from './types';
 
 const instance: {
     enabled: boolean,
@@ -30,7 +31,7 @@ export const enable = (publicKey: CryptoKey, privateKey: CryptoKey, enabled?: bo
     if (serverPublicKey) {
         instance.serverPublicKeyString = serverPublicKey;
     } else {
-        fetch('http://localhost:8080/publickey', {
+        fetch(APICalls.PublicKey, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,13 +99,19 @@ export const decryptFromServer = async (encryptedData: string): Promise<string> 
     if (!instance.privateKey)
         throw new Error('Public key is not set');
     const encryptedArrayBuffer = Uint8Array.from(atob(encryptedData), c => c.charCodeAt(0)).buffer;
-    const decryptedData = await window.crypto.subtle.decrypt(
-        {
-            name: "RSA-OAEP",
-        },
-        instance.privateKey,
-        encryptedArrayBuffer
-    );
+    let decryptedData;
+    try {
+        decryptedData = await window.crypto.subtle.decrypt(
+            {
+                name: "RSA-OAEP",
+            },
+            instance.privateKey,
+            encryptedArrayBuffer
+        );
+    } catch (error) {
+        console.error('Error decrypting data:', error);
+        throw new Error('Decryption failed');
+    }
     const decodedData = new TextDecoder().decode(decryptedData);
     return decodedData;
 };
@@ -153,3 +160,5 @@ export const generateRSAKeyPair = async (): Promise<CryptoKeyPair> => {
     );
     return keypair;
 };
+
+

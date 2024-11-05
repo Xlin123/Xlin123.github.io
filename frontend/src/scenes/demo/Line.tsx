@@ -27,8 +27,8 @@ const ScrollableConsoleLine = (props: LinePropsType) => {
     return (
         <div className="h-full" onClick={() => inputRef.current?.focus()}>
             <div className="mx-5 my-5 h-full" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                <pre className="h-auto">{props.outputText}</pre>
-                <input id="terminalInput" className='bg-secondary-600 rounded w-full focus:outline-none animate-blink' onChange={handleInputChange} onKeyUp={handleKeyPress} ref={inputRef} />
+                <pre className="h-auto  text-altText">{props.outputText}</pre>
+                <input id="terminalInput" className='bg-secondary-400 text-altText rounded w-full focus:outline-none animate-blink' onChange={handleInputChange} onKeyUp={handleKeyPress} ref={inputRef} />
             </div>
         </div>
     );

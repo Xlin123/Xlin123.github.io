@@ -13,6 +13,12 @@ export interface DescriptionType {
   link: React.ReactNode;
 }
 
+export enum APICalls {
+  RequestSession = 'http://localhost:8080/session/request',
+  ConnectWebsocket = 'ws://localhost:8080/ws',
+  PublicKey = 'http://localhost:8080/publickey'
+}
+
 export interface ItemType {
   name: string;
   description: string;
