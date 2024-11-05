@@ -50,11 +50,11 @@ class Encryption {
 
   ///Inbound Request uses CLIENT public key, which is sent in the payoad
   String encryptToJson(String data) {
-    return <String, dynamic>{
+    return jsonEncode({
       'payload': clientEncrypter!.encrypt(data).base64,
       'publicKey': getServerPublicKey(),
       'signature': 'base64',
-    }.toString();
+    });
   }
 
   ///Outbound Response uses SERVER private key, which is stored in the server
