@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:backend/connections/custom_web_socket_channel.dart';
+import 'package:backend/requests/ws_request.dart';
+import 'package:backend/session_manager.dart';
 import 'package:backend/utils/encryption.dart';
 import 'package:backend/requests/new_session_request.dart';
+import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
 import 'package:dotenv/dotenv.dart';
 
 /// Represents an authorized session with role-based authentication.
@@ -19,6 +25,10 @@ class AuthorizedSession {
   /// The encryption used for secure communication.
   Encryption encryption;
 
+  CustomWebSocketChannel? channel;
+
+  Timer _expiryTimer = Timer(Duration.zero, () {});
+
   /// The cached instance of the authorized session.
   static AuthorizedSession? _cachedSession;
 
@@ -32,7 +42,24 @@ class AuthorizedSession {
     required this.username,
     required this.encryption,
     required this.vmType,
-  });
+  }) {
+    _startExpiryTimer();
+  }
+
+  void _startExpiryTimer() {
+    final duration = expiryDate.difference(DateTime.now());
+    _expiryTimer = Timer(duration, () {
+      if (channel != null) {
+        channel!.stop();
+      }
+      dispose();
+      SessionManager.closeSession(this);
+    });
+  }
+
+  void dispose() {
+    _expiryTimer.cancel();
+  }
 
   /// Creates an instance of [AuthorizedSession] from a [NewSessionRequest].
   factory AuthorizedSession.fromRequest(NewSessionRequest request) {
@@ -50,16 +77,26 @@ class AuthorizedSession {
     return _cachedSession!;
   }
 
+  void connectWebSocket(WebSocketChannel chan, WebSocketRequest webReq) async {
+    try {
+      channel = await CustomWebSocketChannel(chan).init(webReq);
+    } catch (e) {
+      SessionManager.closeSession(this);
+      print(e);
+    }
+  }
+
   /// Converts the [AuthorizedSession] instance to a JSON object.
   Map<dynamic, dynamic> toJson() {
     var deviceName = id.split("-").first;
+    var status =
+        channel == null ? WebsocketStatus.uninitialized : channel!.status;
     var args = "-d $deviceName -u $username -t @almond842 -r @rv_am";
     if (role == Role.admin) {
       args += " -f @bagel69";
     } else {
       args += " -f @chess69";
     }
-
     return <dynamic, dynamic>{
       'role': role.toJson(),
       'id': id,
@@ -67,7 +104,25 @@ class AuthorizedSession {
       'username': username,
       'args': args,
       'expiryDate': expiryDate.toIso8601String(),
+      'status': status.toString(),
     };
+  }
+
+  /// Checks if a list of [AuthorizedSession] contains a session with the given [id].
+  static bool containsSessionWithId(
+      List<AuthorizedSession> sessions, String id) {
+    return sessions.any((session) => session.id == id);
+  }
+
+  /// Finds an [AuthorizedSession] in a list by its [id].
+  static AuthorizedSession? findSessionById(
+      List<AuthorizedSession> sessions, String id) {
+    for (var session in sessions) {
+      if (session.id == id) {
+        return session;
+      }
+    }
+    return null;
   }
 }
 

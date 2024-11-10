@@ -36,6 +36,10 @@ class SessionManager {
     return jsonEncode(map);
   }
 
+  static AuthorizedSession getSession(String id) {
+    return _activeSessions.firstWhere((s) => s.id == id);
+  }
+
   static bool isAuthenticated(String id) {
     for (var session in _activeSessions) {
       if (id == session.id) {

@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:backend/authorized_session.dart';
+import 'package:backend/connections/custom_web_socket_channel.dart';
 import 'package:backend/requests/default_request.dart';
 import 'package:backend/requests/ws_request.dart';
 import 'package:backend/session_manager.dart';
 import 'package:backend/utils/encryption.dart';
+import 'package:backend/utils/heartbeat.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
 import 'package:encrypt/encrypt.dart';
 
-bool initialized = false;
-Process? process; // Declare process as nullable
+List<AuthorizedSession> _activeSessions = <AuthorizedSession>[];
 
 /// Handles WebSocket connections
 ///
@@ -33,46 +35,55 @@ Future<Response> onRequest(RequestContext context) async {
 }
 
 void _onConnection(WebSocketChannel chan, String? protocol) {
+  AuthorizedSession? activeSession;
   chan.stream.listen((data) async {
-    Key? channelKey;
     var message = data.toString();
-    if (!initialized) {
-      if (message.contains("init")) {
-        try {
-          var map = jsonDecode(message);
-          var decode = map["init"] as Map<String, dynamic>;
-          var webReq = WebSocketRequest.fromDefaultRequest(
-              DefaultRequest.fromJson(decode));
-          process = await _initializeProcess(webReq);
-          initialized = true;
-          channelKey = webReq.chanKey;
-          process!.stdout.transform(utf8.decoder).listen((event) {
-            //would like to turn into a stream transformer
-            chan.sink.add(Encryption.encryptChannel(webReq.chanKey, event));
-          });
-          process!.stderr.transform(utf8.decoder).listen((event) {
-            chan.sink.add(Encryption.encryptChannel(webReq.chanKey, event));
-          });
-        } on FormatException {
-          chan.sink.add("Invalid intitialization payload");
-        } catch (e) {
-          chan.sink.add("Unauthorized");
+    if (activeSession != null &&
+        activeSession?.channel?.status == WebsocketStatus.connected &&
+        !activeSession!.channel!.isAlive()) {
+      activeSession?.channel?.stop();
+      return;
+    }
+    if (message.contains('stop')) {
+      activeSession?.channel?.stop();
+      _activeSessions.remove(activeSession);
+      return;
+    } else if (message.contains('noop:ok')) {
+      activeSession!.channel!.heartbeat!.dead = false;
+    } else if (message.contains("init")) {
+      try {
+        var map = jsonDecode(message);
+        var decode = jsonDecode(map['init'] as String) as Map<String, dynamic>;
+        var webReq = WebSocketRequest.fromDefaultRequest(
+            DefaultRequest.fromJson(decode));
+        if (AuthorizedSession.containsSessionWithId(
+            _activeSessions, webReq.id)) {
+          chan.sink.add("Unauthorized Access Request: Session already exists");
+        } else {
+          activeSession = SessionManager.getSession(webReq.id);
+          activeSession?.connectWebSocket(chan, webReq);
+          _activeSessions.add(activeSession!);
         }
-      } else {
-        chan.sink.add("Invalid command");
+      } catch (e) {
+        chan.sink.add("Invalid initialization payload");
       }
-    } else {
-      var decrypted = Encryption.decryptChannel(channelKey!, message);
-      process!.stdin.writeln(decrypted);
+    } else if (activeSession != null &&
+        activeSession?.channel!.status == WebsocketStatus.connected) {
+      try {
+        if (activeSession != null) {
+          var decrypted = Encryption.decryptChannel(
+              activeSession!.channel!.channelKey!, message);
+          activeSession?.channel!.process!.stdin.writeln(decrypted);
+        }
+      } catch (e) {
+        if (activeSession?.channel == null) {
+          throw Exception("Channel not initialized");
+        }
+        activeSession!.channel!.channel.sink.add("Invalid message: $e");
+        activeSession!.channel!.stop();
+        SessionManager.closeSession(activeSession!);
+        activeSession!.channel!.status = WebsocketStatus.disconnected;
+      }
     }
   });
-}
-
-Future<Process> _initializeProcess(WebSocketRequest webReq) async {
-  if (SessionManager.isAuthenticated(webReq.id)) {
-    return await Process.start('sshnp', webReq.args,
-        mode: ProcessStartMode.detachedWithStdio);
-  } else {
-    throw const FormatException('Unauthorized');
-  }
 }
