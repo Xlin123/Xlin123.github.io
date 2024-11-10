@@ -4,6 +4,8 @@
 Integration
 
 Working on making the websocket request, looking good, not too concerned for this part. Only big roadblock could be the aes encryption for the stream.
+
+Added Heartbeat via noop and noop:ok on the websocket to detect whether the websocket is still alive on both sides.
 ## Goals
 - Finish integrating the websocket on the frontend so I can move onto doing the infrastructure (which i still haven't decided if it need a daemon).
 - Cleanup the frontend (will likely be a late phase goal...)
@@ -11,9 +13,11 @@ Working on making the websocket request, looking good, not too concerned for thi
 ## Accomplishments
 - Terminal UI is functioning nice.
 - Added material ui for qol. 
+- I had a bug where when the heartbeat died the session wouldn't remove itself from the active sessions, but using this I have accidentally created cached sessions so I decided to keep it lol.
 
 ## Challenges
  - Encryption is killing me, I'm surprised how much I'm struggling with integrating it...
+ - Websocket had no good way of checking if the connection / session was still active.
 
 ## Lessons Learned
 - Never underestimate how much needs to be done for encryption LOL
