@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import React, { useEffect } from 'react'
 import { set, useForm } from 'react-hook-form';
 import ScrollableConsoleLine from './Line';
-import { encryptForServer, encryptForChannel, decryptFromChannel, getInstance, generateRandomAESKey } from '../../shared/EncryptionUtil';
+import { encryptForServer, encryptForChannel, decryptFromChannel, getInstance, generateAESKey, exportAESKey } from '../../shared/EncryptionUtil';
 import { Button, Input, Typography } from '@material-tailwind/react';
 
 type Props = {
@@ -20,7 +20,7 @@ const Demo = ({ setSelectedPage, status = "unspawned" }: Props) => {
             <motion.div className='flex flex-col items-center justify-center h-full'
                 onViewportEnter={() => setSelectedPage(SelectedPage.Demo)}>
                 <motion.div
-                    className='w-full h-full items-center'
+                    className='w-full h-full '
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.5 }}
@@ -100,9 +100,9 @@ const renderContent = (authenticated, setAuthenticated) => {
         );
     } else {
         body = (
-            <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-4 w-1/3">
-                <Input variant='outlined' color='white' error={failedAuth} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} crossOrigin={undefined} type="text" {...register("username")} className="px-4 py-2 rounded-md" label='Username' placeholder="Enter username" />
-                <div>
+            <div className='items-center justify-center flex flex-col'>
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-4 w-1/3">
+                    <Input variant='outlined' color='white' error={failedAuth} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} crossOrigin={undefined} type="text" {...register("username")} className="px-4 py-2 rounded-md" label='Username' placeholder="Enter username" />
                     <Input variant='outlined' color='white' error={failedAuth} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} crossOrigin={undefined} type="text" {...register("passcode")} className="px-4 py-2 rounded-md" label='Passcode' placeholder="Enter passcode" />
                     <Typography
                         variant="small"
@@ -122,24 +122,26 @@ const renderContent = (authenticated, setAuthenticated) => {
                         </svg>
                         Use code provided by me, or contact me for one (Github or Linkedin).
                     </Typography>
-                </div>
-                <Button type="submit" size="lg" className="ml-2 px-4 py-2 rounded-md bg-tertiary-500 text-accent hover:bg-secondary-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Submit</Button>
-            </form>
+                    <Button type="submit" size="lg" className="ml-2 px-4 py-2 rounded-md bg-tertiary-500 text-accent hover:bg-secondary-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>Submit</Button>
+                </form>
+            </div>
         );
     }
     return body;
 }
 
-const connectWebsocket = (responseData, setOutput) => {
+const connectWebsocket = async (responseData, setOutput) => {
     const websocket = new WebSocket(APICalls.ConnectWebsocket);
-    const chanKey = generateRandomAESKey();
+    const chanKey = await generateAESKey();
+    const exportedAESKey = await exportAESKey(chanKey);
 
     websocket.onopen = async () => {
         console.log('WebSocket connection established');
-        const body = JSON.stringify({ init: { args: responseData.args, id: responseData.id, username: responseData.username, chanKey: chanKey } });
+        const body = JSON.stringify({ args: responseData.args, id: responseData.id, username: responseData.username, chanKey: exportedAESKey });
         console.log('Sending:', body);
         try {
-            websocket.send(await encryptForServer(body));
+            const encrypted = await encryptForServer(body);
+            websocket.send(JSON.stringify({ init: encrypted }));
         } catch (error) {
             console.error(error);
             throw error;
@@ -147,8 +149,13 @@ const connectWebsocket = (responseData, setOutput) => {
     };
 
     websocket.onmessage = async (event) => {
+        if (event.data === 'noop') {
+            websocket.send('noop:ok');
+            return;
+        }
+        console.log("Encrypted Message received:", event.data);
         const message = event.data;
-        const decrypted = await decryptFromChannel(message, chanKey);
+        const decrypted = await decryptFromChannel(message, exportedAESKey);
         console.log('Message received:', decrypted);
         setOutput(decrypted);
     }

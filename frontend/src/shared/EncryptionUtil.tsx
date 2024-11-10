@@ -116,36 +116,77 @@ export const decryptFromServer = async (encryptedData: string): Promise<string> 
     return decodedData;
 };
 
-export const encryptForChannel = (plaintext: string, aesKey: string): string => {
+export const encryptForChannel = async (plaintext: string, aesKey: string): Promise<string> => {
     if (!instance.enabled)
         return plaintext;
-    let key = CryptoJs.enc.Utf8.parse(aesKey);
-    let buffer = new Buffer(plaintext);
-    let iv = CryptoJs.lib.WordArray.random(128 / 8);
-    return CryptoJs.AES.encrypt(buffer, key, { iv: iv });
+
+    const iv = window.crypto.getRandomValues(new Uint8Array(16));
+    const key = await window.crypto.subtle.importKey(
+        'raw',
+        Buffer.from(aesKey, 'base64'),
+        'AES-CBC',
+        false,
+        ['encrypt']
+    );
+
+    const encodedData = new TextEncoder().encode(plaintext);
+    const encryptedData = await window.crypto.subtle.encrypt(
+        {
+            name: 'AES-CBC',
+            iv: iv,
+        },
+        key,
+        encodedData
+    );
+
+    const payload = Buffer.from(encryptedData).toString('base64');
+    const ivBase64 = Buffer.from(iv).toString('base64');
+
+    return JSON.stringify({ payload, iv: ivBase64 });
 };
 
-export const decryptFromChannel = (json: string, aesKey: string): string => {
-    if (!instance.enabled)
-        return json;
-    let { payload, iv, publicKey } = JSON.parse(json);
-    let encrypted = CryptoJs.lib.CipherParams.create({
-        ciphertext: CryptoJs.enc.Base64.parse(payload),
-        iv: CryptoJs.enc.Hex.parse(iv),
-    });
-    let decrypted = CryptoJs.AES.decrypt(encrypted, CryptoJs.enc.Utf8.parse(aesKey), {
-        keySize: 128 / 8,
-        mode: CryptoJs.mode.CBC,
-        padding: CryptoJs.pad.Pkcs7,
-    });
-    let plaintext = decrypted.toString(CryptoJs.enc.Utf8);
-    return plaintext;
+export const decryptFromChannel = async (json: string, aesKey: string): Promise<string> => {
+    const { payload, iv } = JSON.parse(json);
+
+    const key = await window.crypto.subtle.importKey(
+        'raw',
+        Buffer.from(aesKey, 'base64'),
+        'AES-CBC',
+        false,
+        ['decrypt']
+    );
+
+    const ivArray = Buffer.from(iv, 'base64');
+    const encryptedData = Buffer.from(payload, 'base64');
+
+    const decryptedData = await window.crypto.subtle.decrypt(
+        {
+            name: 'AES-CBC',
+            iv: ivArray,
+        },
+        key,
+        encryptedData
+    );
+
+    return new TextDecoder().decode(decryptedData);
 };
 
-export const generateRandomAESKey = (keySize: number = 256): string => {
-    const key = CryptoJs.lib.WordArray.random(keySize / 8);
-    return key.toString(CryptoJs.enc.Base64);
+export const generateAESKey = async (keySize: number = 256): Promise<CryptoKey> => {
+    const key = await window.crypto.subtle.generateKey(
+        {
+            name: "AES-CBC",
+            length: keySize,
+        },
+        true,
+        ["encrypt", "decrypt"]
+    );
+    return key;
 };
+
+export const exportAESKey = async (key: CryptoKey) => {
+    const exportedKey = await window.crypto.subtle.exportKey("raw", key);
+    return Buffer.from(exportedKey).toString('base64')
+}
 
 export const generateRSAKeyPair = async (): Promise<CryptoKeyPair> => {
     let keypair = await window.crypto.subtle.generateKey(
