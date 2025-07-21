@@ -1,0 +1,47 @@
+# Node.js
+node_modules/
+keys/
+
+# Build output
+dist/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# Dependency lock files
+yarn.lock
+package-lock.json
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Compiled output
+build/
+
+# Cache and temporary files
+.cache/
+.tmp/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+note
+newfrontend/public
+
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
