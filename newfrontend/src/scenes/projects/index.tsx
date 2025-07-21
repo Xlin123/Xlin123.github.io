@@ -1,14 +1,13 @@
-import useMediaQuery from '../../hooks/useMediaQuery';
-import { SelectedPage } from '../../shared/types';
-import ThreeRenderer from '../../shared/ThreeRenderer';
-import ActionButton from '../../shared/ActionButton';
+// import useMediaQuery from '../../hooks/useMediaQuery';
+
+
 
 type Props = {
-  threeRenderer: ThreeRenderer;
+
 };
 
-const Projects = ({ threeRenderer }: Props) => {
-  const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
+const Projects = ({ }: Props) => {
+  // const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
 
   return (
     <div className='relative w-full h-full'>
@@ -19,9 +18,7 @@ const Projects = ({ threeRenderer }: Props) => {
         Explore my projects and learn more about me!
       </p>
       <div className='flex justify-center mt-5'>
-        <ActionButton setPage={threeRenderer.setPage.bind(threeRenderer)} page={SelectedPage.Projects}>
-          Click to start!
-        </ActionButton>
+
       </div>
     </div>
   );

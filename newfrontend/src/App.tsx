@@ -1,9 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SelectedPage } from './shared/types';
-import Home from './scenes/home';
 import Navbar from './scenes/navbar';
-import React from 'react';
-import Projects from './scenes/projects';
 import LoadingScreen from './shared/LoadingScreen';
 import ThreeJSInstance from './shared/ThreeRenderer';
 import DisplayedContent from './shared/DisplayedContent';

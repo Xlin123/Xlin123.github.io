@@ -1,4 +1,4 @@
-import useMediaQuery from '../../hooks/useMediaQuery';
+// import useMediaQuery from '../../hooks/useMediaQuery';
 import { SelectedPage } from '../../shared/types';
 import ActionButton from '../../shared/ActionButton';
 
@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Home = ({ pageFunction }: Props) => {
-  const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
+  // const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
 
   return (
     <div className='relative w-full h-full'>

@@ -1,12 +1,7 @@
 import { SelectedPage } from '../../shared/types';
-import useMediaQuery from '../../hooks/useMediaQuery';
-import ActionButton from '../../shared/ActionButton';
-import AnchorLink from 'react-anchor-link-smooth-scroll';
+// import useMediaQuery from '../../hooks/useMediaQuery';
 import { motion } from 'framer-motion';
-import React from 'react';
-import TypingHeader from './TypingHeader'; // Adjust the path as necessary
-import { DiDart, DiDocker, DiDotnet, DiGit, DiGithub, DiGithubBadge, DiGoogleCloudPlatform, DiJava, DiJavascript, DiPostgresql, DiPython } from 'react-icons/di';
-import ThreeBackground from './ThreeBackground';
+
 
 
 type Props = {
@@ -14,7 +9,7 @@ type Props = {
 }
 
 const Home = ({ setSelectedPage }: Props) => {
-  const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
+  // const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
   return (
     <motion.div className='md:flex mx-auto w-5/6 items-center justify-center md:h-5/6 relative'
       onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
@@ -31,11 +26,10 @@ const Home = ({ setSelectedPage }: Props) => {
             hidden: { opacity: 0, x: -50 },
             visible: { opacity: 1, x: 0 }
           }}>
-          <ThreeBackground />
         </motion.div>
       </div>
     </motion.div>
-  )
+  );
 }
 
 export default Home

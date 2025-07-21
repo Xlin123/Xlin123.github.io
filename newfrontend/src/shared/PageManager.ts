@@ -1,4 +1,3 @@
-import type ThreeRenderer from "./ThreeRenderer";
 import { SelectedPage } from "./types";
 
 
