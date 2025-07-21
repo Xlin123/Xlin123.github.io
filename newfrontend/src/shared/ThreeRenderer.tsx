@@ -218,13 +218,13 @@ class ThreeRenderer {
         const gltfLoader = new GLTFLoader();
 
         // Preload HDR texture
-        rgbeLoader.loadAsync('/lmap.hdr').then((texture) => {
+        rgbeLoader.loadAsync('/assets/lmap.hdr').then((texture) => {
             texture.mapping = THREE.EquirectangularReflectionMapping;
             this.scene.environment = texture;
         });
 
         // Preload GLTF car model
-        gltfLoader.loadAsync('/gtr.glb').then((gltf) => {
+        gltfLoader.loadAsync('/assets/gtr.glb').then((gltf) => {
             const root = gltf.scene;
             root.position.set(0, 0, 0);
             root.scale.set(50, 50, 50);
@@ -232,7 +232,7 @@ class ThreeRenderer {
         });
 
         // Preload GLTF scene model
-        gltfLoader.loadAsync('/scene.glb').then((gltf) => {
+        gltfLoader.loadAsync('/assets/scene.glb').then((gltf) => {
             const root = gltf.scene;
             root.position.set(0, 0, 0);
             root.scale.set(1, 1, 1);
