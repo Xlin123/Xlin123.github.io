@@ -28,10 +28,10 @@ const Technical = ({ pageFunction }: Props) => {
         </>
       ) : ( 
         <>
-          <h2 className="m-0 text-lg text-center font-montserrat font-medium">
+          <h2 className="m-0 text-md text-center font-montserrat font-small">
             My experience with Atsign emphasized fast-paced development and adaptability.
           </h2>
-          <p className="mt-2 text-sm text-center font-montserrat font-medium">
+          <p className="mt-2 text-sm text-center font-montserrat font-small">
             This lead to a business focused development approach where every line of code must be impactful.
           </p>
         </>
@@ -56,9 +56,9 @@ const Technical = ({ pageFunction }: Props) => {
         </div>
       </div>
 
-      <p className="mt-2 text-base text-center font-montserrat font-medium">
+      {isAboveMediumScreens && (<p className="mt-2 text-base text-center font-montserrat font-medium">
         I am deeply passionate about technology and I wish to build solutions that make a difference.
-      </p>
+      </p>)}
       <div className='flex justify-center mt-5'>
         <ActionButton setPage={pageFunction} page={SelectedPage.Experience}>
           Next: Experience
