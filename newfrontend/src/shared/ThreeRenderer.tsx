@@ -227,7 +227,7 @@ class ThreeRenderer {
         gltfLoader.loadAsync('/assets/gtr.glb').then((gltf) => {
             const root = gltf.scene;
             root.position.set(0, 0, 0);
-            root.scale.set(50, 50, 50);
+            root.scale.set(0.5, 0.5, 0.5);
             this.scene.add(root);
         });
 
