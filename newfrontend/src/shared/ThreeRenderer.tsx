@@ -312,7 +312,7 @@ class ThreeRenderer {
 
         // Convert 50px movement to world units
         // Assuming roughly 1000px = 1 world unit at typical camera distance
-        const movementScale = 0.1; // Adjust this to get exactly 50px equivalent
+        const movementScale = 0.25; // Adjust this to get exactly 50px equivalent
 
         this.targetCameraOffset.x = this.mouse.x * movementScale;
         this.targetCameraOffset.y = this.mouse.y * movementScale;

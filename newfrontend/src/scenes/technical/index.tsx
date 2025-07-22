@@ -43,8 +43,8 @@ const Technical = ({ pageFunction }: Props) => {
         I am deeply passionate about technology and I wish to build solutions that make a difference.
       </p>
       <div className='flex justify-center mt-5'>
-        <ActionButton setPage={pageFunction} page={SelectedPage.Projects}>
-          Next: Projects
+        <ActionButton setPage={pageFunction} page={SelectedPage.Experience}>
+          Next: Experience
         </ActionButton>
       </div>
     </div>

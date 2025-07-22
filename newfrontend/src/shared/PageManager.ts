@@ -21,11 +21,11 @@ class PageManager {
             case 'technical':
                 newPosition = { x: 0.0, y: 0.8, z: 1.75 };
                 break;
-            case 'projects':
-                newPosition = { x: 0.1, y: 0.8, z: -1.9 };
+            case 'experience':
+                newPosition = { x: 0.7, y: 0.6, z: -0.3 };
                 break;
             case 'passion':
-                newPosition = { x: 0, y: 2, z: 5 };
+                newPosition = { x: 0, y: 1, z: -1.5 };
                 break;
             case 'contact':
                 newPosition = { x: 0.1, y: 0.8, z: -1.9 };

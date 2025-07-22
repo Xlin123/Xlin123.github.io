@@ -28,7 +28,7 @@ const Navbar = ({ pageManager, isTopOfPage }: Props) => {
                                 <div className={`${flexBetween} gap-8 text-sm`}>
                                     <Link page="Home" setPage={pageFunction} />
                                     <Link page="Technical" setPage={pageFunction} />
-                                    <Link page="Projects" setPage={pageFunction} />
+                                    <Link page="Experience" setPage={pageFunction} />
                                     <Link page="Passion" setPage={pageFunction} />
                                     <Link page="Contact" setPage={pageFunction} />
                                 </div>

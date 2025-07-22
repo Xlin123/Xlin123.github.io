@@ -1,34 +1,41 @@
-import { SelectedPage } from '../../shared/types';
 // import useMediaQuery from '../../hooks/useMediaQuery';
-import { motion } from 'framer-motion';
-
+import { SelectedPage } from '../../shared/types';
+import ActionButton from '../../shared/ActionButton';
 
 type Props = {
-  setSelectedPage: (value: SelectedPage) => void;
-}
+  pageFunction: (value: SelectedPage) => void;
+};
 
-const Home = ({ setSelectedPage }: Props) => {
+const Contact = ({ pageFunction }: Props) => {
   // const isAboveMediumScreens = useMediaQuery("(min-width:1060px)");
-  return (
-    <motion.div className='md:flex mx-auto w-5/6 items-center justify-center md:h-5/6 relative'
-      onViewportEnter={() => setSelectedPage(SelectedPage.Home)}>
-      {/*MAIN*/}
-      <div className='z-0 basis-3/5 relative'>
-        {/*headings*/}
-        <motion.div
-          className=''
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.5 }}
-          variants={{
-            hidden: { opacity: 0, x: -50 },
-            visible: { opacity: 1, x: 0 }
-          }}>
-        </motion.div>
-      </div>
-    </motion.div>
-  )
-}
 
-export default Home
+  return (
+    <div className='relative w-full h-full'>
+      <h1 className="text-2xl text-center font-montserratm font-bold ">
+        Contact
+      </h1>
+      <h2 className="mt-2 text-base text-center font-montserrat font-medium">
+        I'm getting ready for hackathons! <br />
+        I don't have many projects since I'm focusing on building solutions at work.
+      </h2>
+      <div className="flex justify-center mt-4">
+        <a
+          href="https://www.linkedin.com/in/xavier-lin/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline font-montserrat font-medium hover:text-tertiary-200 transition"
+        >
+          Reach out to me on LinkedIn!
+        </a>
+      </div>
+
+      <div className='flex justify-center mt-5'>
+        <ActionButton setPage={pageFunction} page={SelectedPage.Home}>
+          Back to Home
+        </ActionButton>
+      </div>
+    </div>
+  );
+};
+
+export default Contact;
