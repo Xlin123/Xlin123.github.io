@@ -214,14 +214,7 @@ class ThreeRenderer {
     }
 
     private loadHDRIModels() {
-        const rgbeLoader = new RGBELoader();
         const gltfLoader = new GLTFLoader();
-
-        // Preload HDR texture
-        rgbeLoader.loadAsync('/assets/lmap.hdr').then((texture) => {
-            texture.mapping = THREE.EquirectangularReflectionMapping;
-            this.scene.environment = texture;
-        });
 
         // Preload GLTF car model
         gltfLoader.loadAsync('/assets/gtr.glb').then((gltf) => {
